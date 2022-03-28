@@ -118,7 +118,7 @@ provider "intersight" {
 ### HYPERFLEX CLUSTER PROVISIONING MODULE ###
 module "hx" {
   source  = "cisco-apjc-cloud-se/hx/intersight"
-  version = "1.0.1"
+  version = "1.0.2"
 
   ### COMMON SETTINGS ###
   action              = "Deploy" # Validate, Deploy, Continue, Retry, Abort, Unassign, No-op
@@ -291,7 +291,7 @@ provider "intersight" {
 ### HYPERFLEX CLUSTER PROVISIONING MODULE ###
 module "hx" {
   source  = "cisco-apjc-cloud-se/hx/intersight"
-  version = "1.0.1"
+  version = "1.0.2"
 
   ### COMMON SETTINGS ###
   action              = "Deploy" # Validate, Deploy, Continue, Retry, Abort, Unassign, No-op
