@@ -3,13 +3,21 @@
 ## Introduction
 This module will simplify the configuration & deployment of a HyperFlex HCI cluster through the Intersight Cloud Operating Platform.
 
+![HX Overview](./images/hx-overview.png)
+
 HyperFlex clusters are configured using a set of policies grouped together as a profile.  The profile is then assigned to a group of physical HyperFlex servers, themselves either connected and managed through a pair of Cisco UCS Fabric Interconnects (i.e. **HyperFlex Data Center** clusters) or connected directly any upstream switches (i.e. **HyperFlex Edge** clusters).  This module will support either connectivity model.
+
+![Policies](./images/hx-config-options.png)
 
 This module will suport deploying HyperFlex clusters with either the default *VMware vSphere ESXi* operating system, or now the *[Cisco Intersight Workload Engine (IWE)](https://www.cisco.com/c/en/us/products/collateral/cloud-systems-management/intersight/at-a-glance-c45-2470301.html)* operating system for Kubernetes-based workloads. There are some configuration differences between these two operating systems.  Please see the section for each OS below.
 
 ## Module Usage
 ### Deployment
 **NOTE:** Currently the Intersight API does not currently support both configuring & deploying the HyperFlex cluster from Terraform in one single plan.  Instead the plan has to be run twice.
+
+For details on deploying an HX cluster with VMware ESXi please see the section [VMware vSphere ESXi Operating System](#vmware-vsphere-esxi-operating-system).
+
+For details on deploying an HX cluster with Cisco IWE please see the the section [Cisco Intersight Workload Engine Operating System](#cisco-intersight-workload-engine-operating-system).
 
 #### Step 1: Define the cluster configuration and assign server nodes
 Run the Terraform plan with `action = "No-op"`.
