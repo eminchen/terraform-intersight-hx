@@ -117,7 +117,8 @@ provider "intersight" {
 
 ### HYPERFLEX CLUSTER PROVISIONING MODULE ###
 module "hx" {
-  source = "./modules/terraform-intersight-hx"
+  source  = "cisco-apjc-cloud-se/hx/intersight"
+  version = "1.0.1"
 
   ### COMMON SETTINGS ###
   action              = "Deploy" # Validate, Deploy, Continue, Retry, Abort, Unassign, No-op
@@ -289,7 +290,8 @@ provider "intersight" {
 
 ### HYPERFLEX CLUSTER PROVISIONING MODULE ###
 module "hx" {
-  source = "./modules/terraform-intersight-hx"
+  source  = "cisco-apjc-cloud-se/hx/intersight"
+  version = "1.0.1"
 
   ### COMMON SETTINGS ###
   action              = "Deploy" # Validate, Deploy, Continue, Retry, Abort, Unassign, No-op
