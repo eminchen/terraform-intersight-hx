@@ -7,7 +7,53 @@ HyperFlex clusters are configured using a set of policies grouped together as a 
 
 This module will suport deploying HyperFlex clusters with either the default *VMware vSphere ESXi* operating system, or now the *[Cisco Intersight Workload Engine (IWE)](https://www.cisco.com/c/en/us/products/collateral/cloud-systems-management/intersight/at-a-glance-c45-2470301.html)* operating system for Kubernetes-based workloads. There are some configuration differences between these two operating systems.  Please see the section for each OS below.
 
-## Usage
+## Module Usage
+### Deployment
+**NOTE:** Currently the Intersight API does not currently support both configuring & deploying the HyperFlex cluster from Terraform in one single plan.  Instead the plan has to be run twice.
+
+#### Step 1: Define the cluster configuration and assign server nodes
+Run the Terraform plan with `action = "No-op"`.
+
+This step will create the necessary cluster profile and associated policies in Intersight as well as assign servers to the profile.  Assigning servers will automaticaly create Interisght node profiles which must be present before the cluster can be deployed in Step 2.
+
+#### Step 2: Deploy the HyperFlex cluster
+Run the Terraform plan again with `action = "Deploy"`.
+
+This step will run the Validate & Deploy task within Intersight and begin the process of deploying the HyperFlex cluster.  This step can be monitored within the Intersight GUI at either the HyperFlex profiles page or in more detail under the Intersight Requests page.
+
+### Undeployment
+To undeploy the cluster from Terrafom **DO NOT** run a destroy plan without first unassigning the servers from the cluster as this can leave the profile in a `DeleteFailed` state and will need to be manually deleted through the Intersight API.
+
+There is no "Undeploy" task for HyperFlex clusters in Intersight.  The expectation is that if the cluster is no longer required, it will be shutdown and server (service) profiles unassociated from the servers.  The servers can then be re-imaged and/or factory defaulted and re-used for other purposes.
+
+Our recommended procedure is:
+##### 1. Shutdown servers and remove server profile association #####
+This would be through vCenter, Intersight or UCS Manager.  This also marks the servers as available for use by other/new server profiles.  By default the server policies used for HyperFlex profiles **DOES NOT** wipe or format the servers' drives.  This would need to be manually done or the policy updated to force securely wiping & re-formatting the drives on server profile disassocation.
+
+##### 2. Unassign the servers from the cluster #####
+Run the Terraform plan again with `action = "Unassign"`.
+
+This will remove the automatically created node profiles within Intersight.  This profile can effectively be re-used and re-assigned to different server nodes at this stage.   
+
+##### 3. Delete the HyperFlex profile & policies #####
+Run the Terraform plan as a **DESTROY** type plan.  
+
+This will trigger Intersight to delete the HyperFlex profile and any policies that were also created as part of the original plan.   Re-used policies will not be affected.  Terraform will remove all resources & data sources from the state file at this stage.
+
+##### 4. Unclaim HyperFlex and IWE targets #####
+As there is no undeploy action within Intersight, it has no way of knowing the cluster is no longer present.  Depending on the cluster, there may be targets for
+* The HyperFlex cluster itself (i.e the HXDP controller)
+* The IWE OS & Kubernetes cluster (if IWE type cluster)
+* Each individual HX server node (if standalone or edge deployments)
+
+These may need to be removed manually if applicable or appropriate.
+
+##### 5. Tidy-up Kubernetes Cluster Profile via Intersight API #####
+If for some reason, the cluster profile did not delete cleanly the cluster profile may be hidden from the GUI and left in a `DeleteFailed` state.  This may not be noticable until attemping to create another cluster with the same name.   To ensure that no profiles are left behind it is good practice to use the Intersight API `GET /api/v1/kubernetes/ClusterProfiles` to ensure no profiles are left in a `status = "DeleteFailed"` state.   Should a profile
+
+![API ClusterProfiles](./images/api-getclusters.png)
+
+
 ### Common Assumptions
 * Intersight credentials have been configured as either a local tfvars file excluded from the Git repository or as a sensitive variable in the Terraform workspace (Cloud / Enterprise verions).  These credentials should never be included in any Git code repositories.
 * The passwords to use for HXDP and Hypervisor Admin (root) accounts should also be defined in either a local tfvars file excluded from the Git repository or as a sensitive variable in the Terraform workspace (Cloud / Enterprise verions).  These credentials should never be included in any Git code repositories.
