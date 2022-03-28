@@ -48,11 +48,10 @@ As there is no undeploy action within Intersight, it has no way of knowing the c
 
 These may need to be removed manually if applicable or appropriate.
 
-##### 5. Tidy-up Kubernetes Cluster Profile via Intersight API #####
-If for some reason, the cluster profile did not delete cleanly the cluster profile may be hidden from the GUI and left in a `DeleteFailed` state.  This may not be noticable until attemping to create another cluster with the same name.   To ensure that no profiles are left behind it is good practice to use the Intersight API `GET /api/v1/kubernetes/ClusterProfiles` to ensure no profiles are left in a `status = "DeleteFailed"` state.   Should a profile
+##### 5. Tidy-up IWE Kubernetes Cluster Profile via Intersight API #####
+If for some reason, the HyperFlex cluster profile did not delete cleanly the associated bare-metal IKS cluster profile may be hidden from the GUI and left in a `DeleteFailed` state.  This may not be noticeable until attemping to create another cluster with the same name.   To ensure that no profiles are left behind it is good practice to use the Intersight API `GET /api/v1/kubernetes/ClusterProfiles` to ensure no profiles are left in a `status = "DeleteFailed"` state.   Should a profile be found, these can be deleted correctly using the `DELETE /api/v1/kubernetes/ClusterProfiles` API and the MOID of the specific failed profile.
 
 ![API ClusterProfiles](./images/api-getclusters.png)
-
 
 ### Common Assumptions
 * Intersight credentials have been configured as either a local tfvars file excluded from the Git repository or as a sensitive variable in the Terraform workspace (Cloud / Enterprise verions).  These credentials should never be included in any Git code repositories.
@@ -437,6 +436,12 @@ module "hx" {
 ```
 
 #### Results
+
+![IWE HX Operate](./images/operate-hx-iwe.png)
+
+![Overview](./images/iwe-profile-overview.png)
+
+![Policies](./images/iwe-profile-policies.png)
 
 ### Advanced Usage
 #### Node (Server) Configuration
