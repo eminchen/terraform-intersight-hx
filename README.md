@@ -7,7 +7,7 @@ This module will simplify the configuration & deployment of a HyperFlex HCI clus
 
 HyperFlex clusters are configured using a set of policies grouped together as a profile.  The profile is then assigned to a group of physical HyperFlex servers, themselves either connected and managed through a pair of Cisco UCS Fabric Interconnects (i.e. **HyperFlex Data Center** clusters) or connected directly any upstream switches (i.e. **HyperFlex Edge** clusters).  This module will support either connectivity model.
 
-![Policies](./images/hx-config-options.png)
+![HX Config Options](./images/hx-config-options.png)
 
 This module will suport deploying HyperFlex clusters with either the default *VMware vSphere ESXi* operating system, or now the *[Cisco Intersight Workload Engine (IWE)](https://www.cisco.com/c/en/us/products/collateral/cloud-systems-management/intersight/at-a-glance-c45-2470301.html)* operating system for Kubernetes-based workloads. There are some configuration differences between these two operating systems.  Please see the section for each OS below.
 
