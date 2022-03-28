@@ -61,13 +61,13 @@ If for some reason, the HyperFlex cluster profile did not delete cleanly the ass
 
 ![API ClusterProfiles](./images/api-getclusters.png)
 
-### Common Assumptions
+## Common Assumptions
 * Intersight credentials have been configured as either a local tfvars file excluded from the Git repository or as a sensitive variable in the Terraform workspace (Cloud / Enterprise verions).  These credentials should never be included in any Git code repositories.
 * The passwords to use for HXDP and Hypervisor Admin (root) accounts should also be defined in either a local tfvars file excluded from the Git repository or as a sensitive variable in the Terraform workspace (Cloud / Enterprise verions).  These credentials should never be included in any Git code repositories.
 * The `nodes` variable assumes the target HX servers' serial number will be used as the key for the map variable.  `cluster_index` is used to order the cluster and create a hostname suffix. For consistency, these should be assigned the same order as the servers have been discovered by UCS Manager (if used).
 * For HyperFlex cluster deployments using UCS Manager-based Fabric Interconnects, the defined `server_firmware_version` firmware package must already be downloaded and available within UCS Manager.
 
-### Caveats
+## Caveats
 * To destroy the cluster, you must first run the plan with the `action` parameter set to `Unassign`.  Then you will be able to run a destroy plan succesfully.
 
 * The Intersight Terraform provider tracks the `action` parameter as a stateful configuration parameter however Interisght will change this parameter to `No-op` after the action has been submitted.  This will mean any subsequent runs will show the `action` parameter as not matching the state and Terraform will attempt to redeploy the cluster.  This should have no impact however as Intersight will verify nothing has changed.  To avoid this as being seen as a state change in Terraform, set the `action` parameter to `No-op` after the cluster has been deployed and re-run the plan to update the status or run a "refresh" type plan.
@@ -80,11 +80,11 @@ If for some reason, the HyperFlex cluster profile did not delete cleanly the ass
 
 ![tfcb apply failed](./images/apply-failed.png)
 
-### VMware vSphere ESXi Operating System
-#### Assumptions
+## VMware vSphere ESXi Operating System
+### Assumptions
 * If required, a vCenter instance should be available for the HX cluster to be registered to.  This is defined in an optional associated vCenter configuration policy.  If creating a new policy with Terraform, the password for the vCenter account should not be included in the code directly and instead be configured in either a local tfvars file excluded from the Git repository or as a sensitive variable in the Terraform workspace (Cloud / Enterprise versions).
 
-#### Usage
+### Usage
 The following is an example plan that uses this module to define and create a new VMware vSphere ESXi-based HyperFlex DC cluster assigned to 3 servers (nodes).  Please see the `/examples/vsphere/dc` directory for more details.
 
 *NOTE:* Some associated policies have been defined inline and some have been re-used (`use_existing = true`)
@@ -244,7 +244,7 @@ module "hx" {
 }
 ```
 
-#### Results
+### Results
 
 ![vCenter](./images/new-vsphere-cluster.png)
 
@@ -252,11 +252,11 @@ module "hx" {
 
 ![Policies](./images/vsphere-profile-policies.png)
 
-### Cisco Intersight Workload Engine Operating System
-#### Caveats
+## Cisco Intersight Workload Engine Operating System
+### Caveats
 * For IWE deployments, adding VM network VLANs requires the cluster to have been deployed first then the plan run and applied a 2nd time with the variable `cluster_deployed` set to `true`. Also the `action` parameter is not applicable to adding (or removing) additional VLANs.  
 
-#### Usage
+### Usage
 The following is an example plan that uses this module to define and create a new Cisco Intersight Workload Engine (IWE) HyperFlex DC cluster assigned to 3 servers (nodes).  Please see the `/examples/iwe/dc` directory for more details.
 
 *NOTE:* Some associated policies have been defined inline and some have been re-used (`use_existing = true`)
@@ -443,7 +443,7 @@ module "hx" {
 }
 ```
 
-#### Results
+### Results
 
 ![IWE HX Operate](./images/operate-hx-iwe.png)
 
@@ -451,8 +451,8 @@ module "hx" {
 
 ![Policies](./images/iwe-profile-policies.png)
 
-### Advanced Usage
-#### Node (Server) Configuration
+## Advanced Usage
+### Node (Server) Configuration
 By default, Intersight will automatically allocate IP addresses for each node from the range of IP addresses defined in the Cluster Node Configuration Policy.  These can be overriden and defined explicitly for each node.
 
 ```hcl
