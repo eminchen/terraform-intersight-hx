@@ -29,7 +29,7 @@ module "hx" {
   version = "1.0.2"
 
   ### COMMON SETTINGS ###
-  action              = "Deploy" # Validate, Deploy, Continue, Retry, Abort, Unassign, No-op
+  action              = "No-op" # Validate, Deploy, Continue, Retry, Abort, Unassign, No-op
   wait_for_completion = false
   organization        = "default"
   tags                = []
