@@ -2,7 +2,7 @@ terraform {
   # NOTE: Remove the 'backend' section for locally run Terraform plans with no remote state management.  This is not recommended.
   backend "remote" {
     hostname = "app.terraform.io"
-    organization = "mel-ciscolabs-com"
+    organization = "Toronto_DCLAB"
     workspaces {
       name = "iwe-hyperflex"
     }
